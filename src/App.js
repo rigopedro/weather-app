@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import WeatherPanel from './components/weatherPanel';
+import SearchBar from './components/searchBar';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import { fetchWeatherByCity } from './services/weatherService';
 
 function App() {
+  const [city, setCity] = useState('');
+  const [weatherData, setWeatherData] = useState(null);
+
+  const handleSearch = async () => {
+    const data = await fetchWeatherByCity(city);
+    setWeatherData(data);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <SearchBar city={city} setCity={setCity} onSearch={handleSearch} />
+      <WeatherPanel weatherData={weatherData} />
+      <Footer />
     </div>
   );
 }
